@@ -7,13 +7,14 @@ on:
     - cron: "10 0 * * *"
 
 jobs:
-  link-check:
+  desktop-link-check:
+    name: Desktop Link Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check links in urls.txt
+      - name: Check desktop links (urls.txt)
         uses: lycheeverse/lychee-action@v2
         with:
           args: >
@@ -23,4 +24,25 @@ jobs:
             --retry-wait-time 5
             --max-retries 2
             --accept 200,204,301,302,303,307,308
+            --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
             urls.txt
+
+  mobile-link-check:
+    name: Mobile Link Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check mobile-only links (urls_mobile.txt)
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >
+            --no-progress
+            --verbose
+            --timeout 20
+            --retry-wait-time 5
+            --max-retries 2
+            --accept 200,204,301,302,303,307,308
+            --user-agent "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Mobile Safari/537.36"
+            urls_mobile.txt
